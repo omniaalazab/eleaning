@@ -1,6 +1,7 @@
 import 'package:eleaning/core/helper/color_helper.dart';
 import 'package:eleaning/extensions/navigation_extension.dart';
 import 'package:eleaning/presentation/cubit/profile/profile_cubit.dart';
+import 'package:eleaning/presentation/cubit/profile/profile_state.dart';
 import 'package:eleaning/presentation/cubit/user/user_cubit.dart';
 import 'package:eleaning/presentation/cubit/user/user_state.dart';
 import 'package:eleaning/presentation/ui/screens/student/edit_profile.dart';
@@ -19,11 +20,17 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
-    context.read<UserCubit>().fetchUserData();
-    context.read<ProfileCubit>().fetchProfileImage(context);
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Check if user is logged in before trying to fetch data
+      if (FirebaseAuth.instance.currentUser != null) {
+        context.read<UserCubit>().fetchUserData();
+        context.read<ProfileCubit>().fetchProfileImage(context);
+      }
+    });
   }
 
+  // final profileCubit = context.read<ProfileCubit>();
   User? user = FirebaseAuth.instance.currentUser;
   @override
   Widget build(BuildContext context) {
@@ -55,22 +62,47 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 context,
                               );
                             },
-                            child: CircleAvatar(
-                              radius: 50,
-                              backgroundColor: ColorHelper.white,
-
-                              backgroundImage: NetworkImage(
-                                (state.user[0].userImagePath),
-                              ),
+                            child: BlocBuilder<ProfileCubit, ProfileState>(
+                              builder: (context, state) {
+                                // Handle different profile states
+                                if (state is LoadingProfileState) {
+                                  return const CircleAvatar(
+                                    radius: 50,
+                                    child: CircularProgressIndicator(),
+                                  );
+                                } else if (state is SucessProfileState) {
+                                  // Display profile image with MemoryImage from state
+                                  return CircleAvatar(
+                                    radius: 50,
+                                    backgroundImage: state.imageProvider,
+                                  );
+                                } else if (state is FailureProfileState) {
+                                  return const CircleAvatar(
+                                    radius: 50,
+                                    child: Icon(Icons.error),
+                                  );
+                                } else {
+                                  // Default placeholder
+                                  return const CircleAvatar(
+                                    radius: 50,
+                                    child: Icon(Icons.person),
+                                  );
+                                }
+                              },
                             ),
                           ),
+
                           Positioned(
                             left: 60,
                             bottom: 0,
                             child: CircleAvatar(
                               radius: 20,
                               child: IconButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  context
+                                      .read<ProfileCubit>()
+                                      .changeProfileImage(context);
+                                },
                                 icon: Icon(Icons.edit),
                               ),
                             ),
@@ -88,9 +120,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           vertical: 2.h,
                         ),
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "Username",
+                              "User Name : ${state.user[0].userName}",
+                              style: TextStyle(
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              "User Full Name : ${state.user[0].userFullName}",
+                              style: TextStyle(
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              "User Mail : ${state.user[0].userMail}",
                               style: TextStyle(
                                 fontSize: 14.sp,
                                 fontWeight: FontWeight.bold,

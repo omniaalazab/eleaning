@@ -16,6 +16,7 @@ import 'package:eleaning/presentation/cubit/user/user_state.dart';
 import 'package:eleaning/presentation/ui/widgets/common_widget/custom_text_field.dart';
 import 'package:eleaning/presentation/ui/widgets/popular_category_row.dart';
 import 'package:eleaning/presentation/ui/widgets/star_rating_row.dart';
+import 'package:eleaning/presentation/ui/widgets/user_info_user.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -304,41 +305,6 @@ class TeacherInfoRow extends StatelessWidget {
           ),
         ),
         SizedBox(width: 2),
-      ],
-    );
-  }
-}
-
-class UserInfoRow extends StatelessWidget {
-  const UserInfoRow({
-    super.key,
-    required this.userName,
-    required this.userImagePath,
-  });
-  final String userName;
-  final String userImagePath;
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "${ConstantText.hello}, $userName",
-              style: TextStyleHelper.textStylefontSize22,
-            ),
-            Text(
-              ConstantText.welcomeMessage,
-              textAlign: TextAlign.start,
-              style: TextStyleHelper.textStylefontSize16.copyWith(
-                color: ColorHelper.grey,
-              ),
-            ),
-          ],
-        ),
-        CircleAvatar(radius: 40, child: Image.network(userImagePath)),
       ],
     );
   }

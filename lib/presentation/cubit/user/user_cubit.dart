@@ -93,7 +93,7 @@ class UserCubit extends Cubit<UserState> {
     if (userPassword != null) updateData['userPassword'] = userPassword;
 
     if (userFullName != null) updateData['userFullName'] = userFullName;
-    if (profileImage != null) updateData['profileImage'] = profileImage;
+    if (profileImage != null) updateData['userImagePath'] = profileImage;
 
     await FirebaseFirestore.instance
         .collection('users')

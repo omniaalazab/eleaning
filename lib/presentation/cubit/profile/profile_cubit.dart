@@ -1,189 +1,6 @@
-// import 'dart:developer';
-// import 'dart:io';
-
-// import 'package:appwrite/appwrite.dart';
-// import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:eleaning/main.dart';
-// import 'package:eleaning/presentation/cubit/profile/profile_state.dart';
-// import 'package:eleaning/presentation/ui/widgets/common_widget/toast_dialog.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:firebase_storage/firebase_storage.dart';
-// import 'package:flutter/material.dart';
-// import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:image_picker/image_picker.dart';
-
-// class ProfileCubit extends Cubit<ProfileState> {
-//   ProfileCubit() : super(InitialProfileState());
-//     final ImagePicker picker = ImagePicker();
-//   final storage = Storage(client); // Initialize the Storage service
-//   String? _uploadedImageUrl;
-
-//   Future<void> changeProfileImage(var context) async {
-//     CreateDialogToaster.showErrorDialogDefult(
-//       "Loading",
-//       "Image Loading",
-//       context,
-//     );
-
-//     try {
-//       emit(LoadingProfileState());
-
-//       final XFile? pickImage = await picker.pickImage(
-//         source: ImageSource.gallery,
-//         imageQuality: 80,
-//       );
-
-//       if (pickImage == null) {
-//         emit(InitialProfileState());
-//         Navigator.pop(context);
-//         return;
-//       }
-
-//       File imageFile = File(pickImage.path);
-//       String? userMail = FirebaseAuth.instance.currentUser?.email;
-
-//       if (userMail == null) {
-//         emit(FailureProfileState(error: "User not logged in"));
-//         Navigator.pop(context);
-//         return;
-//       }
-
-//       try {
-//         log("Starting image upload to Appwrite for user: $userMail");
-
-//         final String fileName = "${DateTime.now().millisecondsSinceEpoch}.jpg";
-
-//         // Create a file object for Appwrite
-//         final InputFile inputFile = InputFile.fromBytes(
-//           imageFile.readAsBytesSync(),
-//           filename: fileName,
-//         );
-
-//         // Replace 'your_bucket_id' with your Appwrite storage bucket ID
-//         final models.File uploadedFile = await storage.createFile(
-//           bucketId: 'elearning_bucket_id1',
-//           fileId: 'profile_$userMail', // Consider a more unique ID strategy
-//           file: inputFile,
-//         );
-
-//         log("Image uploaded to Appwrite. File ID: ${uploadedFile.$id}");
-
-//         // Get the URL of the uploaded file
-//         final String imageUrl = storage.getFileView(
-//           bucketId: 'elearning_bucket_id1',
-//           fileId: uploadedFile.$id,
-//         );
-//         _uploadedImageUrl = imageUrl; // Store the URL
-
-//         log("Appwrite image URL: $imageUrl");
-
-//         // Update Firestore with the Appwrite image URL
-//         DocumentReference userDocRef = FirebaseFirestore.instance
-//             .collection('users')
-//             .doc(userMail);
-
-//         DocumentSnapshot userDoc = await userDocRef.get();
-
-//         if (userDoc.exists) {
-//           await userDocRef.update({"profileImage": imageUrl});
-//           log("Updated existing user document with Appwrite URL");
-//         } else {
-//           await userDocRef.set({
-//             "profileImage": imageUrl,
-//             "email": userMail,
-//             "createdAt": FieldValue.serverTimestamp(),
-//           });
-//           log("Created new user document with Appwrite URL");
-//         }
-
-//         emit(SucessProfileState(imageProvider: NetworkImage(imageUrl)));
-//         Navigator.pop(context);
-//         CreateDialogToaster.showErrorDialogDefult(
-//           "Success",
-//           "Profile image updated successfully",
-//           context,
-//         );
-//       } catch (e) {
-//         log("Appwrite storage error: $e");
-//         emit(FailureProfileState(error: e.toString()));
-//         Navigator.pop(context);
-//         CreateDialogToaster.showErrorDialogDefult(
-//           "Error",
-//           "Failed to upload image to Appwrite: ${e.toString()}",
-//           context,
-//         );
-//       }
-//     } catch (e) {
-//       log("Error in changeProfileImage: $e");
-//       emit(FailureProfileState(error: e.toString()));
-//       Navigator.pop(context);
-//       CreateDialogToaster.showErrorDialogDefult(
-//         "Error",
-//         "An error occurred: ${e.toString()}",
-//         context,
-//       );
-//     }
-//   }
-
-//   Future<void> fetchProfileImage(BuildContext context) async {
-//     CreateDialogToaster.showErrorDialogDefult(
-//       "Loading",
-//       "Image Loading",
-//       context,
-//     );
-
-//     try {
-//       emit(LoadingProfileState());
-
-//       String? userMail = FirebaseAuth.instance.currentUser?.email;
-
-//       if (userMail == null) {
-//         emit(FailureProfileState(error: "User not logged in"));
-//         Navigator.pop(context);
-//         return;
-//       }
-
-//       log("Fetching profile for user: $userMail");
-
-//       DocumentSnapshot userDoc =
-//           await FirebaseFirestore.instance
-//               .collection('users')
-//               .doc(userMail)
-//               .get();
-
-//       if (userDoc.exists) {
-//         Map<String, dynamic>? userData =
-//             userDoc.data() as Map<String, dynamic>?;
-
-//         if (userData != null && userData.containsKey('profileImage')) {
-//           String imageUrl = userData['profileImage'] as String;
-
-//           if (imageUrl.isNotEmpty) {
-//             log("Found image URL: $imageUrl");
-//             emit(SucessProfileState(imageProvider: NetworkImage(imageUrl)));
-//           } else {
-//             log("Image URL is empty");
-//             emit(InitialProfileState());
-//           }
-//         } else {
-//           log("No profile image found in user data");
-//           emit(InitialProfileState());
-//         }
-//       } else {
-//         log("User document doesn't exist");
-//         emit(InitialProfileState());
-//       }
-//     }
-//     // Add this state if it doesn't exist
-//     catch (e) {
-//       log(e.toString());
-//       emit(FailureProfileState(error: e.toString()));
-//     }
-//     Navigator.pop(context);
-//   }
-// }
 import 'dart:developer';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart' as models;
@@ -198,192 +15,198 @@ import 'package:image_picker/image_picker.dart';
 
 class ProfileCubit extends Cubit<ProfileState> {
   ProfileCubit() : super(InitialProfileState());
-  final ImagePicker picker = ImagePicker();
-  final Storage storage = Storage(
-    client,
-  ); // Initialize Storage service with client from main.dart
-  String? _uploadedImageUrl;
 
-  // Constants to avoid magic strings
-  static const String BUCKET_ID = 'elearning_bucket_id1';
-  static const String USERS_COLLECTION = 'users';
+  // Services
+  final ImagePicker _picker = ImagePicker();
+  final Storage _storage = Storage(client);
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
+  // Cache
+  Uint8List? _profileImageBytes;
+  String? _profileImageId;
+
+  // Constants
+  static const String _bucketId = 'elearning_bucket_id1';
+  static const String _userCollection = 'users';
+
+  /// Selects and changes the user's profile image
   Future<void> changeProfileImage(BuildContext context) async {
-    CreateDialogToaster.showErrorDialogDefult(
-      "Loading",
-      "Please wait while we process your image",
-      context,
-    );
-
     try {
+      // Check if user is logged in first
+      String? userEmail = getCurrentUserEmail();
+      if (userEmail == null) {
+        // Handle gracefully - don't show error, just return
+        return;
+      }
+
+      // Show loading dialog
+      _showLoadingDialog(context, "Please wait while we process your image");
+
+      // Update state to loading
       emit(LoadingProfileState());
 
-      final XFile? pickImage = await picker.pickImage(
+      // Pick image from gallery
+      final XFile? pickedImage = await _picker.pickImage(
         source: ImageSource.gallery,
         imageQuality: 80,
       );
 
-      if (pickImage == null) {
+      // Handle case where user canceled image selection
+      if (pickedImage == null) {
         emit(InitialProfileState());
         Navigator.pop(context);
         return;
       }
 
-      File imageFile = File(pickImage.path);
-      String? userMail = FirebaseAuth.instance.currentUser?.email;
-
-      if (userMail == null) {
-        emit(FailureProfileState(error: "User not logged in"));
-        Navigator.pop(context);
-        return;
-      }
-
-      try {
-        log("Starting image upload to Appwrite for user: $userMail");
-
-        final String fileName =
-            "profile_${DateTime.now().millisecondsSinceEpoch}.jpg";
-        final String fileId = ID.unique(); // Generate a unique ID for the file
-
-        // Create input file from the image bytes
-        final InputFile inputFile = InputFile.fromBytes(
-          bytes: await imageFile.readAsBytes(),
-          filename: fileName,
-        );
-
-        // Upload file to Appwrite storage
-        final models.File uploadedFile = await storage.createFile(
-          bucketId: BUCKET_ID,
-          fileId: fileId,
-          file: inputFile,
-        );
-
-        log("Image uploaded to Appwrite. File ID: ${uploadedFile.$id}");
-
-        // Generate the file view URL
-        final String imageUrl = await _getFileViewUrl(uploadedFile.$id);
-        _uploadedImageUrl = imageUrl;
-
-        log("Appwrite image URL: $imageUrl");
-
-        // Update Firestore with the image URL
-        await _updateUserProfileInFirestore(userMail, imageUrl);
-
-        // Update UI with success state
-        emit(SucessProfileState(imageProvider: NetworkImage(imageUrl)));
-        Navigator.pop(context);
-        CreateDialogToaster.showErrorDialogDefult(
-          "Success",
-          "Profile image updated successfully",
-          context,
-        );
-      } catch (e) {
-        log("Appwrite storage error: $e");
-        emit(FailureProfileState(error: e.toString()));
-        Navigator.pop(context);
-        CreateDialogToaster.showErrorDialogDefult(
-          "Error",
-          "Failed to upload image: ${e.toString()}",
-          context,
-        );
-      }
+      // Process and upload image
+      File imageFile = File(pickedImage.path);
+      await _uploadAndSaveImage(context, imageFile, userEmail);
     } catch (e) {
-      log("Error in changeProfileImage: $e");
-      emit(FailureProfileState(error: e.toString()));
-      Navigator.pop(context);
-      CreateDialogToaster.showErrorDialogDefult(
-        "Error",
-        "An error occurred: ${e.toString()}",
-        context,
-      );
+      _handleError(context, "An error occurred: ${e.toString()}");
     }
   }
 
+  /// Fetches the user's profile image
   Future<void> fetchProfileImage(BuildContext context) async {
-    CreateDialogToaster.showErrorDialogDefult(
-      "Loading",
-      "Loading profile data",
-      context,
-    );
-
     try {
       emit(LoadingProfileState());
 
-      String? userMail = FirebaseAuth.instance.currentUser?.email;
-
-      if (userMail == null) {
-        emit(FailureProfileState(error: "User not logged in"));
-        Navigator.pop(context);
+      // Get the current user's email
+      String? userEmail = getCurrentUserEmail();
+      if (userEmail == null) {
+        emit(FailureProfileState(error: "User not logged in."));
         return;
       }
 
-      log("Fetching profile for user: $userMail");
-
-      // Get user document from Firestore
+      // Get fileId from Firestore
       DocumentSnapshot userDoc =
-          await FirebaseFirestore.instance
-              .collection(USERS_COLLECTION)
-              .doc(userMail)
-              .get();
+          await _firestore.collection(_userCollection).doc(userEmail).get();
 
-      if (userDoc.exists) {
-        Map<String, dynamic>? userData =
-            userDoc.data() as Map<String, dynamic>?;
-
-        if (userData != null && userData.containsKey('profileImage')) {
-          String imageUrl = userData['profileImage'] as String;
-
-          if (imageUrl.isNotEmpty) {
-            log("Found image URL: $imageUrl");
-            _uploadedImageUrl = imageUrl;
-            emit(SucessProfileState(imageProvider: NetworkImage(imageUrl)));
-          } else {
-            log("Image URL is empty");
-            emit(InitialProfileState());
-          }
-        } else {
-          log("No profile image found in user data");
-          emit(InitialProfileState());
-        }
-      } else {
-        log("User document doesn't exist");
-        emit(InitialProfileState());
+      if (!userDoc.exists ||
+          !userDoc.data().toString().contains('userImagePath')) {
+        emit(FailureProfileState(error: "No profile image found."));
+        return;
       }
 
-      Navigator.pop(context);
+      final String fileId = userDoc.get('userImagePath');
+
+      // Download the image bytes using fileId
+      final Uint8List imageBytes = await _downloadImageBytes(fileId);
+
+      // Emit success state
+      emit(SucessProfileState(imageProvider: MemoryImage(imageBytes)));
     } catch (e) {
-      log("Error in fetchProfileImage: $e");
       emit(FailureProfileState(error: e.toString()));
-      Navigator.pop(context);
     }
   }
 
-  // Helper method to get file view URL
-  Future<String> _getFileViewUrl(String fileId) async {
-    return storage.getFileView(bucketId: BUCKET_ID, fileId: fileId).toString();
+  /// Returns the cached profile image bytes if available
+  // Uint8List? get profileImageBytes => _profileImageBytes;
+
+  /// Upload image to Appwrite and save reference in Firestore
+  Future<void> _uploadAndSaveImage(
+    BuildContext context,
+    File imageFile,
+    String userEmail,
+  ) async {
+    try {
+      log("Starting image upload to Appwrite for user: $userEmail");
+
+      final String fileName =
+          "profile_${DateTime.now().millisecondsSinceEpoch}.jpg";
+      final String fileId = ID.unique();
+
+      // Create input file from image bytes
+      final Uint8List imageBytes = await imageFile.readAsBytes();
+      final InputFile inputFile = InputFile.fromBytes(
+        bytes: imageBytes,
+        filename: fileName,
+      );
+
+      // Upload file to Appwrite storage
+      final models.File uploadedFile = await _storage.createFile(
+        bucketId: _bucketId,
+        fileId: fileId,
+        file: inputFile,
+      );
+
+      log("Image uploaded to Appwrite. File ID: ${uploadedFile.$id}");
+
+      // Cache the image bytes and ID
+      _profileImageBytes = imageBytes;
+      _profileImageId = uploadedFile.$id;
+
+      // Update Firestore with file ID
+      await _updateUserProfileInFirestore(userEmail, uploadedFile.$id);
+
+      // Update UI with success state using MemoryImage
+      emit(SucessProfileState(imageProvider: MemoryImage(imageBytes)));
+
+      // Close loading dialog and show success message
+      Navigator.pop(context);
+      CreateDialogToaster.showErrorDialogDefult(
+        "Success",
+        "Profile image updated successfully",
+        context,
+      );
+    } catch (e) {
+      log("Error uploading image: $e");
+      _handleError(context, "Failed to upload image: ${e.toString()}");
+    }
   }
 
-  // Helper method to update user profile in Firestore
+  /// Download image bytes from Appwrite
+  Future<Uint8List> _downloadImageBytes(String fileId) async {
+    try {
+      return await _storage.getFileDownload(
+        bucketId: _bucketId,
+        fileId: fileId,
+      );
+    } catch (e) {
+      log("Error downloading file: $e");
+      throw Exception('Failed to download image: $e');
+    }
+  }
+
+  /// Update user profile in Firestore
   Future<void> _updateUserProfileInFirestore(
-    String userMail,
-    String imageUrl,
+    String userEmail,
+    String fileId,
   ) async {
-    DocumentReference userDocRef = FirebaseFirestore.instance
-        .collection("users")
-        .doc(userMail);
+    DocumentReference userDocRef = _firestore
+        .collection(_userCollection)
+        .doc(userEmail);
 
     DocumentSnapshot userDoc = await userDocRef.get();
 
     if (userDoc.exists) {
-      await userDocRef.update({"UserImagePath": imageUrl});
-      log("Updated existing user document with Appwrite URL");
+      await userDocRef.update({"userImagePath": fileId});
+      log("Updated existing user document with file ID");
     } else {
       await userDocRef.set({
-        "userImagePath": imageUrl,
-        "userMail": userMail,
+        "userImagePath": fileId,
+        "email": userEmail,
         "createdAt": FieldValue.serverTimestamp(),
       });
-      log("Created new user document with Appwrite URL");
+      log("Created new user document with file ID");
     }
+  }
+
+  /// Get current user email
+  String? getCurrentUserEmail() {
+    return _auth.currentUser?.email;
+  }
+
+  /// Show loading dialog
+  void _showLoadingDialog(BuildContext context, String message) {
+    CreateDialogToaster.showErrorDialogDefult("Loading", message, context);
+  }
+
+  /// Handle errors
+  void _handleError(BuildContext context, String errorMessage) {
+    emit(FailureProfileState(error: errorMessage));
+    Navigator.pop(context);
+    CreateDialogToaster.showErrorDialogDefult("Error", errorMessage, context);
   }
 }
