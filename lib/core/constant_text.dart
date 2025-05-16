@@ -14,6 +14,7 @@ class ConstantText {
   static const String register = "Register";
   static const String login = "Login";
   static const String skip = "Skip";
+  static const String confirm = "Confirm";
   static const String loginMessage = "Welcome back!\n Sign in to continue!";
   static const String loginGoogleButton = "Log in with Google";
   static const String loginFacebookButton = "Log in with Facebook";
@@ -50,4 +51,9 @@ class ConstantText {
   static const String error = "Error";
   static const String hot = "Hot";
   static const String graphicIllustration = "Graphic illustration";
+  static const String failedtoupdateprofile = "Failed to update profile";
+  static const String passwordCharacters =
+      "password must be at least 8 characters";
+  static const String oopsError = "Oops There is an error";
+  static const String editProfile = "Edit Profile";
 }

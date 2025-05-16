@@ -59,7 +59,7 @@ class _EditProfileState extends State<EditProfile> {
           ),
         ),
         title: Text(
-          "Edit Profile",
+          ConstantText.editProfile,
           style: TextStyleHelper.textStylefontSize20.copyWith(
             fontWeight: FontWeight.bold,
             color: Colors.white,
@@ -78,7 +78,7 @@ class _EditProfileState extends State<EditProfile> {
                     listener: (context, state) {
                       if (state is FailureProfileState) {
                         CreateDialogToaster.showErrorToast(
-                          "Oops There is an error",
+                          ConstantText.oopsError,
                         );
                       }
                     },
@@ -186,7 +186,7 @@ class _EditProfileState extends State<EditProfile> {
                             ),
                             validatorFunction: (value) {
                               if (value!.length < 8) {
-                                return "password must be at least 8 characters";
+                                return ConstantText.passwordCharacters;
                               }
                               // CheckEmptyValidationTextField.checkIsEmpty(value);
                               return null;
@@ -195,7 +195,7 @@ class _EditProfileState extends State<EditProfile> {
                           const SizedBox(height: 20),
 
                           CustomElevatedButton(
-                            buttonText: "Confirm",
+                            buttonText: ConstantText.confirm,
                             onPressedFunction: () async {
                               if (formState.currentState!.validate()) {
                                 try {
@@ -209,7 +209,7 @@ class _EditProfileState extends State<EditProfile> {
                                   context.push(ProfileScreen());
                                 } catch (e) {
                                   CreateDialogToaster.showErrorToast(
-                                    "S.of(context).Failedtoupdateprofile",
+                                    ConstantText.failedtoupdateprofile,
                                   );
                                 }
                               }
