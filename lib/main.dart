@@ -20,7 +20,7 @@ void main() async {
       .setSelfSigned(status: true);
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await _preventRecording();
-  _preventScreenshot();
+  // _preventScreenshot();
   runApp(const MyApp());
 }
 
