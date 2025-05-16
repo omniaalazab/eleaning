@@ -56,4 +56,7 @@ class ConstantText {
       "password must be at least 8 characters";
   static const String oopsError = "Oops There is an error";
   static const String editProfile = "Edit Profile";
+  static const String shareProfile = "Share this app";
+  static const String scanQRCode = "Scan this QR to download the app";
+  static const String logout = "Log out";
 }
