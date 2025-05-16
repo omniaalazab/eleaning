@@ -5,6 +5,13 @@ extension NavigationExtension on BuildContext {
     return Navigator.of(this).push(MaterialPageRoute(builder: (_) => widget));
   }
 
+  Future<dynamic> pushRemoveUntil(Widget widget) {
+    return Navigator.of(this).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (_) => widget),
+      (route) => false,
+    );
+  }
+
   void pop() {
     Navigator.of(this).pop();
   }
