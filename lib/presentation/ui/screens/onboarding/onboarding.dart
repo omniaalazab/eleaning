@@ -117,7 +117,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 buttonColor: ColorHelper.white,
                 textColor: ColorHelper.blue,
                 onPressedFunction: () {
-                  context.push(Login());
+                  context.push(LoginScreen());
                 },
               ),
             ],

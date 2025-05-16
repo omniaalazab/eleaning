@@ -7,6 +7,7 @@ import 'package:eleaning/extensions/navigation_extension.dart';
 import 'package:eleaning/presentation/cubit/register/register_cubit.dart';
 import 'package:eleaning/presentation/cubit/register/register_state.dart';
 import 'package:eleaning/presentation/cubit/user/user_cubit.dart';
+import 'package:eleaning/presentation/ui/screens/auth/forget_password.dart';
 import 'package:eleaning/presentation/ui/screens/auth/login.dart';
 
 import 'package:eleaning/presentation/ui/widgets/common_widget/custom_elevated_button.dart';
@@ -54,7 +55,9 @@ class _RegisterState extends State<Register> {
                 if (state is RegistrationSuccess) {
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => const Login()),
+                    MaterialPageRoute(
+                      builder: (context) => const LoginScreen(),
+                    ),
                   );
                 } else if (state is RegistrationFailure) {
                   CreateDialogToaster.showErrorToast(state.error);
@@ -194,7 +197,18 @@ class _RegisterState extends State<Register> {
                         SizedBox(height: 1.h),
                         TextButton(
                           onPressed: () {
-                            context.push(Login());
+                            context.push(LoginScreen());
+                          },
+                          child: Text(
+                            ConstantText.forgetPassword,
+                            style: TextStyleHelper.textStylefontSize18.copyWith(
+                              color: ColorHelper.blue,
+                            ),
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            context.push(ForgetPassword());
                           },
                           child: Text(
                             ConstantText.forgetPassword,

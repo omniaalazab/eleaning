@@ -41,7 +41,7 @@ class SendMailForReset extends StatelessWidget {
               buttonColor: ColorHelper.blue,
               textColor: ColorHelper.white,
               onPressedFunction: () {
-                context.push(Login());
+                context.push(LoginScreen());
               },
             ),
           ],
