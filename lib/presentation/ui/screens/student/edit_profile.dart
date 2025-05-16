@@ -1,6 +1,7 @@
 import 'package:eleaning/core/constant_text.dart';
 import 'package:eleaning/core/helper/color_helper.dart';
 import 'package:eleaning/core/helper/text_style_helper.dart';
+import 'package:eleaning/core/utills/validator.dart';
 import 'package:eleaning/extensions/navigation_extension.dart';
 import 'package:eleaning/presentation/cubit/profile/profile_cubit.dart';
 import 'package:eleaning/presentation/cubit/profile/profile_state.dart';
@@ -147,6 +148,7 @@ class _EditProfileState extends State<EditProfile> {
                               color: ColorHelper.grey,
                             ),
                             validatorFunction: (value) {
+                              Validators.checkIsEmpty(value);
                               // CheckEmptyValidationTextField.checkIsEmpty(value);
                               return null;
                             },
@@ -159,6 +161,7 @@ class _EditProfileState extends State<EditProfile> {
                               color: ColorHelper.grey,
                             ),
                             validatorFunction: (value) {
+                              Validators.validateEmail(value);
                               return null;
                             },
                           ),
@@ -206,6 +209,7 @@ class _EditProfileState extends State<EditProfile> {
                                     userPassword: passwordController.text,
                                     profileImage: state.user[0].userImagePath,
                                   );
+                                  // ignore: use_build_context_synchronously
                                   context.push(ProfileScreen());
                                 } catch (e) {
                                   CreateDialogToaster.showErrorToast(
