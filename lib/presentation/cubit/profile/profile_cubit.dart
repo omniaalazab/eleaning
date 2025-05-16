@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart' as models;
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:eleaning/extensions/navigation_extension.dart';
 import 'package:eleaning/main.dart';
 import 'package:eleaning/presentation/cubit/profile/profile_state.dart';
 import 'package:eleaning/presentation/ui/widgets/common_widget/toast_dialog.dart';
@@ -23,8 +24,8 @@ class ProfileCubit extends Cubit<ProfileState> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   // Cache
-  Uint8List? _profileImageBytes;
-  String? _profileImageId;
+  // Uint8List? _profileImageBytes;
+  // String? _profileImageId;
 
   // Constants
   static const String _bucketId = 'elearning_bucket_id1';
@@ -55,7 +56,8 @@ class ProfileCubit extends Cubit<ProfileState> {
       // Handle case where user canceled image selection
       if (pickedImage == null) {
         emit(InitialProfileState());
-        Navigator.pop(context);
+        context.pop();
+        // Navigator.pop(context);
         return;
       }
 
@@ -134,8 +136,8 @@ class ProfileCubit extends Cubit<ProfileState> {
       log("Image uploaded to Appwrite. File ID: ${uploadedFile.$id}");
 
       // Cache the image bytes and ID
-      _profileImageBytes = imageBytes;
-      _profileImageId = uploadedFile.$id;
+      // _profileImageBytes = imageBytes;
+      // _profileImageId = uploadedFile.$id;
 
       // Update Firestore with file ID
       await _updateUserProfileInFirestore(userEmail, uploadedFile.$id);
@@ -144,7 +146,7 @@ class ProfileCubit extends Cubit<ProfileState> {
       emit(SucessProfileState(imageProvider: MemoryImage(imageBytes)));
 
       // Close loading dialog and show success message
-      Navigator.pop(context);
+      context.pop();
       CreateDialogToaster.showErrorDialogDefult(
         "Success",
         "Profile image updated successfully",
@@ -206,7 +208,8 @@ class ProfileCubit extends Cubit<ProfileState> {
   /// Handle errors
   void _handleError(BuildContext context, String errorMessage) {
     emit(FailureProfileState(error: errorMessage));
-    Navigator.pop(context);
+    context.pop();
+
     CreateDialogToaster.showErrorDialogDefult("Error", errorMessage, context);
   }
 }
