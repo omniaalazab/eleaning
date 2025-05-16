@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eleaning/data/models/user_model.dart';
+
 import 'package:eleaning/presentation/cubit/user/user_state.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -49,7 +50,7 @@ class UserCubit extends Cubit<UserState> {
   Future<void> fetchUserData() async {
     User? user1 = FirebaseAuth.instance.currentUser;
     if (user1 == null) {
-      print("No authenticated user found");
+      log("No authenticated user found");
       return;
     }
 
@@ -60,7 +61,7 @@ class UserCubit extends Cubit<UserState> {
             .get();
 
     if (snapshot.docs.isEmpty) {
-      print("No user data found in Firestore for email: ${user1.email}");
+      log("No user data found in Firestore for email: ${user1.email}");
       return;
     }
 
