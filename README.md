@@ -38,7 +38,6 @@ Easily share the application via **QR Code** generated within the app for quick 
 
 ## 🖼️ Screenshots
 
-> _Add screenshots here if available to showcase the interface and features._
 
 
 ![1](https://github.com/user-attachments/assets/c61c85bb-488b-455c-ba27-c4034d5e9807)
