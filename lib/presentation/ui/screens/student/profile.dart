@@ -133,9 +133,15 @@ class _ProfileScreenState extends State<ProfileScreen>
         builder: (context, state) {
           if (state.user.isNotEmpty) {
             return Column(
+              // <-- Main Column for the entire screen content
               crossAxisAlignment: CrossAxisAlignment.start,
+              // *** ADD THIS LINE ***
+              mainAxisAlignment:
+                  MainAxisAlignment
+                      .spaceBetween, // Distributes space between children
               children: [
                 Stack(
+                  // <-- This Stack is only for the header and profile image
                   clipBehavior: Clip.none,
                   children: [
                     Container(
@@ -146,6 +152,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                       top: 13.h,
                       left: 35.w,
                       child: Stack(
+                        // Inner Stack for profile pic and edit icon
                         children: [
                           InkWell(
                             onTap: () {
@@ -198,84 +205,89 @@ class _ProfileScreenState extends State<ProfileScreen>
                         ],
                       ),
                     ),
-                    Positioned(
-                      top: 25.h,
-                      left: 0,
-                      right: 0,
-                      // bottom: 70.h,
-                      child: SingleChildScrollView(
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 4.w,
-                            vertical: 2.h,
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              // User Info sections (username, fullname, email)
-                              _buildUserInfoSection(
-                                "${ConstantText.username} : ",
-                                state.user[0].userName,
-                              ),
-                              SizedBox(height: 2.h),
-                              _buildUserInfoSection(
-                                "${ConstantText.fullName} : ",
-                                state.user[0].userFullName,
-                              ),
-                              SizedBox(height: 2.h),
-                              _buildUserInfoSection(
-                                "${ConstantText.email} : ",
-                                state.user[0].userMail,
-                              ),
-                              SizedBox(height: 2.h),
-
-                              // Share Profile Section
-                              Text(
-                                ConstantText.shareProfile,
-                                style: TextStyleHelper.textStylefontSize18
-                                    .copyWith(
-                                      color: ColorHelper.red,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                              ),
-                              const SizedBox(height: 20),
-                              Center(
-                                child: QrImageView(
-                                  data: "", // Add actual QR data here
-                                  version: QrVersions.auto,
-                                  size: 200.0,
-                                ),
-                              ),
-                              const SizedBox(height: 20),
-                              Text(
-                                ConstantText.scanQRCode,
-                                textAlign: TextAlign.center,
-                              ),
-                              SizedBox(height: 3.h),
-
-                              // Logout Button
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    // SizedBox(height: 60.h),
-                    Positioned(
-                      bottom: 2.h,
-                      right: 4.w,
-                      child: TextButton(
-                        onPressed: () {
-                          _handleSignOut();
-                        },
-                        child: Text(
-                          ConstantText.logout,
-                          style: TextStyleHelper.textStylefontSize18.copyWith(
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                    ),
                   ],
+                ),
+                Expanded(
+                  // <-- This takes up all available vertical space for scrollable content
+                  child: SingleChildScrollView(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 4.w,
+                      vertical: 5.h,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // User Info sections (username, fullname, email)
+                        _buildUserInfoSection(
+                          "${ConstantText.username} : ",
+                          state.user[0].userName,
+                        ),
+                        SizedBox(height: 2.h),
+                        _buildUserInfoSection(
+                          "${ConstantText.fullName} : ",
+                          state.user[0].userFullName,
+                        ),
+                        SizedBox(height: 2.h),
+                        _buildUserInfoSection(
+                          "${ConstantText.email} : ",
+                          state.user[0].userMail,
+                        ),
+                        SizedBox(height: 2.h),
+
+                        // Share Profile Section
+                        Text(
+                          ConstantText.shareProfile,
+                          style: TextStyleHelper.textStylefontSize18.copyWith(
+                            color: ColorHelper.red,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        Center(
+                          child: QrImageView(
+                            data:
+                                state.user[0].userMail, // Added actual QR data
+                            version: QrVersions.auto,
+                            size: 200.0,
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        Center(
+                          // Added Center for scanQRCode text for better alignment
+                          child: Text(
+                            ConstantText.scanQRCode,
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        SizedBox(height: 3.h),
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(
+                  // <-- The Logout button is now placed reliably at the bottom
+                  padding: const EdgeInsets.only(
+                    bottom: 24.0,
+                  ), // Padding from the very bottom
+                  child: Center(
+                    // Center the button horizontally
+                    child: ElevatedButton.icon(
+                      onPressed: _handleSignOut,
+                      icon: const Icon(Icons.logout),
+                      label: Text(ConstantText.logout),
+                      style: ElevatedButton.styleFrom(
+                        foregroundColor: ColorHelper.white,
+                        backgroundColor: ColorHelper.red,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 24,
+                          vertical: 12,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
               ],
             );
