@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:eleaning/core/constant_text.dart';
 import 'package:eleaning/core/helper/color_helper.dart';
 import 'package:eleaning/core/helper/text_style_helper.dart';
@@ -7,17 +5,17 @@ import 'package:eleaning/extensions/navigation_extension.dart';
 import 'package:eleaning/presentation/cubit/profile/profile_cubit.dart';
 import 'package:eleaning/presentation/cubit/profile/profile_state.dart';
 import 'package:eleaning/presentation/cubit/signout/signout_cubit.dart';
-import 'package:eleaning/presentation/cubit/signout/signout_state.dart';
+
 import 'package:eleaning/presentation/cubit/user/user_cubit.dart';
 import 'package:eleaning/presentation/cubit/user/user_state.dart';
-import 'package:eleaning/presentation/ui/screens/auth/login.dart';
+
 import 'package:eleaning/presentation/ui/screens/student/edit_profile.dart';
-import 'package:eleaning/presentation/ui/widgets/common_widget/custom_elevated_button.dart';
+
 import 'package:eleaning/presentation/ui/widgets/common_widget/toast_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lottie/lottie.dart';
+
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:sizer/sizer.dart';
 
