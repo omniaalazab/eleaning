@@ -59,73 +59,6 @@ class _ProfileScreenState extends State<ProfileScreen>
     super.dispose();
   }
 
-  void _handleSignOut() {
-    log("Sign out button pressed");
-
-    showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder:
-          (dialogContext) => Dialog(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: BlocProvider.value(
-              value: _signOutCubit,
-              child: BlocListener<SignOutCubit, SignoutState>(
-                listener: (context, state) {
-                  if (state is SignoutSuccess) {
-                    Navigator.of(dialogContext).pop(); // Close dialog
-                    // Navigate to login screen
-                    context.pushRemoveUntil(LoginScreen());
-                  } else if (state is SignoutFailure) {
-                    Navigator.of(dialogContext).pop(); // Close dialog
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('Sign out failed: ${state.error}'),
-                        backgroundColor: Colors.red,
-                      ),
-                    );
-                  }
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(24.0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Lottie.asset(
-                        "assets/images/logout.json",
-                        width: 120,
-                        height: 120,
-                        controller: _logoutAnimation,
-                        repeat: false,
-                        onLoaded: (composition) {
-                          // Set the animation duration based on the Lottie file
-                          _logoutAnimation.duration = composition.duration;
-
-                          // Start the animation
-                          _logoutAnimation.forward().then((_) {
-                            // After animation completes, start the sign out process
-                            _signOutCubit.signOut();
-                          });
-                        },
-                      ),
-                      const SizedBox(height: 16),
-                      Text(
-                        'Signing out...',
-                        style: TextStyleHelper.textStylefontSize16.copyWith(
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -271,7 +204,13 @@ class _ProfileScreenState extends State<ProfileScreen>
                   child: Center(
                     // Center the button horizontally
                     child: ElevatedButton.icon(
-                      onPressed: _handleSignOut,
+                      onPressed: () {
+                        CreateDialogToaster.showLogoutDialog(
+                          context,
+                          _logoutAnimation,
+                          _signOutCubit,
+                        );
+                      },
                       icon: const Icon(Icons.logout),
                       label: Text(ConstantText.logout),
                       style: ElevatedButton.styleFrom(
