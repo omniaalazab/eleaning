@@ -3,6 +3,7 @@ import 'package:eleaning/core/helper/text_style_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:lottie/lottie.dart';
 
 import 'package:sizer/sizer.dart';
 
@@ -104,59 +105,32 @@ class CreateDialogToaster {
     );
   }
 
-  // static Future dialogAppTheme(var context) {
-  //   return showPlatformDialog(
-  //     context: context,
-  //     builder: (context) => BasicDialogAlert(
-  //       title: Container(
-  //           // color: ColorHelper.purple,
-  //           alignment: Alignment.center,
-  //           child: Row(
-  //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //               children: [
-  //                 Text(
-  //                   S.of(context).CheckAppTheme,
-  //                   style: TextStyleHelper.textStylefontSize16
-  //                       .copyWith(fontWeight: FontWeight.w700),
-  //                 ),
-  //                 IconButton(
-  //                     onPressed: () {
-  //                       Navigator.pop(context);
-  //                     },
-  //                     icon: const Icon(Icons.close)),
-  //               ])),
-  //       content: Container(
-  //         width: 100,
-  //         height: 120,
-  //         decoration: BoxDecoration(
-  //           borderRadius: BorderRadius.circular(20),
-  //         ),
-  //         child: Column(
-  //           mainAxisAlignment: MainAxisAlignment.start,
-  //           crossAxisAlignment: CrossAxisAlignment.start,
-  //           children: [
-  //             TextButton(
-  //               onPressed: () {
-  //                 context.read<ThemeCubit>().toggleTheme(false);
-  //               },
-  //               child: Text(S.of(context).LightMode,
-  //                   style: TextStyleHelper.textStylefontSize14),
-  //             ),
-  //             TextButton(
-  //               onPressed: () {
-  //                 context.read<ThemeCubit>().toggleTheme(true);
-  //               },
-  //               child: Text(S.of(context).DarkMode,
-  //                   style: TextStyleHelper.textStylefontSize14),
-  //             )
-  //           ],
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  //   // titlePadding:
-  //   //     const EdgeInsets.only(top: 10),
-  // }
+  static void showLogoutDialog(
+    var context,
+    AnimationController doneController,
+  ) {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder:
+          (context) => Dialog(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Lottie.asset(
+                  "assets/images/logout.json",
+                  onLoaded: (composition) {
+                    doneController.duration = composition.duration;
+                    doneController.forward();
+                  },
+                  controller: doneController,
+                  repeat: false,
+                ),
+              ],
+            ),
+          ),
+    );
+  }
 
   static void showErrorToast(String msgText) {
     Fluttertoast.showToast(
