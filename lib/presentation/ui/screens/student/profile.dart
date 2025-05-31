@@ -245,8 +245,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                         const SizedBox(height: 20),
                         Center(
                           child: QrImageView(
-                            data:
-                                state.user[0].userMail, // Added actual QR data
+                            data: state.user[0].userMail, // assume app url
                             version: QrVersions.auto,
                             size: 200.0,
                           ),
