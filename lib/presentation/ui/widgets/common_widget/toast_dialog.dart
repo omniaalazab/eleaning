@@ -1,6 +1,11 @@
 import 'package:eleaning/core/helper/color_helper.dart';
 import 'package:eleaning/core/helper/text_style_helper.dart';
+import 'package:eleaning/extensions/navigation_extension.dart';
+import 'package:eleaning/presentation/cubit/signout/signout_cubit.dart';
+import 'package:eleaning/presentation/cubit/signout/signout_state.dart';
+import 'package:eleaning/presentation/ui/screens/auth/login.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lottie/lottie.dart';
@@ -107,26 +112,69 @@ class CreateDialogToaster {
 
   static void showLogoutDialog(
     var context,
-    AnimationController doneController,
+    AnimationController logoutAnimation,
+    SignOutCubit signOutCubit,
   ) {
     showDialog(
       barrierDismissible: false,
       context: context,
+
       builder:
-          (context) => Dialog(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Lottie.asset(
-                  "assets/images/logout.json",
-                  onLoaded: (composition) {
-                    doneController.duration = composition.duration;
-                    doneController.forward();
-                  },
-                  controller: doneController,
-                  repeat: false,
+          (dialogContext) => Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: BlocProvider.value(
+              value: signOutCubit,
+              child: BlocListener<SignOutCubit, SignoutState>(
+                listener: (context, state) {
+                  if (state is SignoutSuccess) {
+                    Navigator.of(dialogContext).pop(); // Close dialog
+                    // Navigate to login screen
+                    context.pushRemoveUntil(LoginScreen());
+                  } else if (state is SignoutFailure) {
+                    Navigator.of(dialogContext).pop(); // Close dialog
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Sign out failed: ${state.error}'),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                  }
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(24.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Lottie.asset(
+                        "assets/images/logout.json",
+                        width: 120,
+                        height: 120,
+                        controller: logoutAnimation,
+                        repeat: false,
+                        onLoaded: (composition) {
+                          // Set the animation duration based on the Lottie file
+                          logoutAnimation.duration = composition.duration;
+
+                          // Start the animation
+                          logoutAnimation.forward().then((_) {
+                            // After animation completes, start the sign out process
+                            signOutCubit.signOut();
+                          });
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        'Signing out...',
+                        style: TextStyleHelper.textStylefontSize16.copyWith(
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ],
+              ),
             ),
           ),
     );
