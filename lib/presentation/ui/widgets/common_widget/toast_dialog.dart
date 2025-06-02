@@ -1,8 +1,14 @@
 import 'package:eleaning/core/helper/color_helper.dart';
 import 'package:eleaning/core/helper/text_style_helper.dart';
+import 'package:eleaning/extensions/navigation_extension.dart';
+import 'package:eleaning/presentation/cubit/signout/signout_cubit.dart';
+import 'package:eleaning/presentation/cubit/signout/signout_state.dart';
+import 'package:eleaning/presentation/ui/screens/auth/login.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:lottie/lottie.dart';
 
 import 'package:sizer/sizer.dart';
 
@@ -104,59 +110,75 @@ class CreateDialogToaster {
     );
   }
 
-  // static Future dialogAppTheme(var context) {
-  //   return showPlatformDialog(
-  //     context: context,
-  //     builder: (context) => BasicDialogAlert(
-  //       title: Container(
-  //           // color: ColorHelper.purple,
-  //           alignment: Alignment.center,
-  //           child: Row(
-  //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //               children: [
-  //                 Text(
-  //                   S.of(context).CheckAppTheme,
-  //                   style: TextStyleHelper.textStylefontSize16
-  //                       .copyWith(fontWeight: FontWeight.w700),
-  //                 ),
-  //                 IconButton(
-  //                     onPressed: () {
-  //                       Navigator.pop(context);
-  //                     },
-  //                     icon: const Icon(Icons.close)),
-  //               ])),
-  //       content: Container(
-  //         width: 100,
-  //         height: 120,
-  //         decoration: BoxDecoration(
-  //           borderRadius: BorderRadius.circular(20),
-  //         ),
-  //         child: Column(
-  //           mainAxisAlignment: MainAxisAlignment.start,
-  //           crossAxisAlignment: CrossAxisAlignment.start,
-  //           children: [
-  //             TextButton(
-  //               onPressed: () {
-  //                 context.read<ThemeCubit>().toggleTheme(false);
-  //               },
-  //               child: Text(S.of(context).LightMode,
-  //                   style: TextStyleHelper.textStylefontSize14),
-  //             ),
-  //             TextButton(
-  //               onPressed: () {
-  //                 context.read<ThemeCubit>().toggleTheme(true);
-  //               },
-  //               child: Text(S.of(context).DarkMode,
-  //                   style: TextStyleHelper.textStylefontSize14),
-  //             )
-  //           ],
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  //   // titlePadding:
-  //   //     const EdgeInsets.only(top: 10),
-  // }
+  static void showLogoutDialog(
+    var context,
+    AnimationController logoutAnimation,
+    SignOutCubit signOutCubit,
+  ) {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+
+      builder:
+          (dialogContext) => Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: BlocProvider.value(
+              value: signOutCubit,
+              child: BlocListener<SignOutCubit, SignoutState>(
+                listener: (context, state) {
+                  if (state is SignoutSuccess) {
+                    Navigator.of(dialogContext).pop(); // Close dialog
+                    // Navigate to login screen
+                    context.pushRemoveUntil(LoginScreen());
+                  } else if (state is SignoutFailure) {
+                    Navigator.of(dialogContext).pop(); // Close dialog
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Sign out failed: ${state.error}'),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                  }
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(24.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Lottie.asset(
+                        "assets/images/logout.json",
+                        width: 120,
+                        height: 120,
+                        controller: logoutAnimation,
+                        repeat: false,
+                        onLoaded: (composition) {
+                          // Set the animation duration based on the Lottie file
+                          logoutAnimation.duration = composition.duration;
+
+                          // Start the animation
+                          logoutAnimation.forward().then((_) {
+                            // After animation completes, start the sign out process
+                            signOutCubit.signOut();
+                          });
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        'Signing out...',
+                        style: TextStyleHelper.textStylefontSize16.copyWith(
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+    );
+  }
 
   static void showErrorToast(String msgText) {
     Fluttertoast.showToast(
