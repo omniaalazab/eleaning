@@ -8,9 +8,9 @@ An interactive and modern e-learning mobile application built using **Flutter**.
 - 📖 Browse and view educational content (videos, documents, etc.)
 - 🧑‍🎓 Student login and registration (via Firebase/Auth service)
 - 🔍 Course search functionality with Cubit state management
+- 🔳 QR Code Scanning – Quickly access courses and verify users using in-app QR code scanner
+- 💳 Payment Integration – Secure online payments for course enrollment and premium features
 - 📦 Backend integration:
-  - Firebase Firestore for storing user and course data and  authentication 
-  - Appwrite for alternative storage
 - 📱 Responsive UI 
 
 ---
