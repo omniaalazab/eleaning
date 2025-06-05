@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:appwrite/appwrite.dart';
+import 'package:eleaning/data/services/stripe_payment/stripe_api.dart';
 import 'package:eleaning/firebase_options.dart';
 import 'package:eleaning/presentation/cubit/profile/profile_cubit.dart';
 import 'package:eleaning/presentation/cubit/user/user_cubit.dart';
@@ -8,6 +9,7 @@ import 'package:eleaning/presentation/ui/screens/onboarding/onboarding.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:screen_protector/screen_protector.dart';
 import 'package:sizer/sizer.dart';
 
@@ -21,6 +23,7 @@ void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await _preventRecording();
   _preventScreenshot();
+  Stripe.publishableKey = ApiKeys.stripePublishableKey;
   runApp(const MyApp());
 }
 
