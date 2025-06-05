@@ -1,6 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eleaning/data/repository/payment_repository.dart';
-import 'package:eleaning/data/services/stripe_payment/payment_manager.dart';
+
 import 'package:eleaning/presentation/cubit/payment/payment_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
