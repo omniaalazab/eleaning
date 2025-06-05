@@ -6,6 +6,7 @@ import 'package:eleaning/core/helper/text_style_helper.dart';
 import 'package:eleaning/data/models/course_model.dart';
 import 'package:eleaning/data/repository/courses_repository.dart';
 import 'package:eleaning/data/repository/popular_category_repository.dart';
+import 'package:eleaning/data/services/stripe_payment/payment_manager.dart';
 import 'package:eleaning/extensions/navigation_extension.dart';
 import 'package:eleaning/presentation/cubit/popular_category/popular_category_cubit.dart';
 import 'package:eleaning/presentation/cubit/popular_category/popular_category_state.dart';
@@ -156,7 +157,8 @@ class _SearchScreenState extends State<SearchScreen> {
                   subtitle: Text(course.description),
                 ),
                 onTap: () {
-                  context.push(CourseScreen(courseModel: courses[index]));
+                  PaymentManager.makePayment(courses[index].amount, "USD");
+                  //context.push(CourseScreen(courseModel: courses[index]));
                 },
               );
             },
