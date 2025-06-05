@@ -46,4 +46,4 @@ Easily share the application via **QR Code** generated within the app for quick 
 ![4](https://github.com/user-attachments/assets/8fdb9e26-e37c-41f6-80fe-7cabc58c4b81)
 ![5](https://github.com/user-attachments/assets/cbfc994b-b508-413c-9108-cefd111b2119)
 ![6](https://github.com/user-attachments/assets/956c85e1-c256-4a8e-9c3c-921337b4f635)
-
+![j](https://github.com/user-attachments/assets/db6885fb-7b04-4dd6-8a9a-69086aed6243)
