@@ -6,12 +6,14 @@ class CourseModel {
   String category;
   String imagePath;
   List<Video> videos;
+  int amount;
   CourseModel({
     required this.title,
     required this.category,
     required this.description,
     required this.imagePath,
     required this.videos,
+    required this.amount,
   });
   factory CourseModel.fromSnapshot(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
@@ -19,6 +21,7 @@ class CourseModel {
       category: data['category'] ?? "No category",
       title: data['title'] ?? "",
       description: data['description'] ?? "",
+      amount: data['amount'] ?? 0,
       imagePath: data['imagePath'] ?? "",
       videos:
           (data['videos'] as List<dynamic>)
@@ -32,6 +35,7 @@ class CourseModel {
       description: map['description'],
       title: map['title'],
       imagePath: map['imagePath'],
+      amount: map['amount'] ?? 0,
 
       videos:
           (map['videos'] as List<dynamic>)
@@ -45,6 +49,7 @@ class CourseModel {
       'description': description,
       'title': title,
       'imagePath': imagePath,
+      'amount': amount,
       'videos': videos.map((video) => video.toMap()).toList(),
     };
   }
