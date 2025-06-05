@@ -8,6 +8,8 @@ import 'package:eleaning/data/repository/courses_repository.dart';
 import 'package:eleaning/data/repository/popular_category_repository.dart';
 import 'package:eleaning/data/services/stripe_payment/payment_manager.dart';
 import 'package:eleaning/extensions/navigation_extension.dart';
+import 'package:eleaning/presentation/cubit/payment/payment_cubit.dart';
+import 'package:eleaning/presentation/cubit/payment/payment_state.dart';
 import 'package:eleaning/presentation/cubit/popular_category/popular_category_cubit.dart';
 import 'package:eleaning/presentation/cubit/popular_category/popular_category_state.dart';
 import 'package:eleaning/presentation/cubit/search/search_cubit.dart';
@@ -150,16 +152,38 @@ class _SearchScreenState extends State<SearchScreen> {
             itemCount: courses.length,
             itemBuilder: (context, index) {
               final course = courses[index];
-              return InkWell(
-                child: ListTile(
-                  leading: Image.network(course.imagePath),
-                  title: Text(course.title),
-                  subtitle: Text(course.description),
+              return BlocProvider(
+                create: (_) => PaymentCubit(),
+                child: BlocConsumer<PaymentCubit, PaymentState>(
+                  listener: (context, state) {
+                    if (state is PaymentSucess) {
+                      context.push(CourseScreen(courseModel: course));
+                    } else if (state is PaymentFailure) {
+                      ScaffoldMessenger.of(
+                        context,
+                      ).showSnackBar(SnackBar(content: Text(state.error)));
+                    }
+                  },
+                  builder: (context, state) {
+                    return InkWell(
+                      onTap: () {
+                        if (course.isPaid == true) {
+                          context.push(CourseScreen(courseModel: course));
+                        } else {
+                          context.read<PaymentCubit>().makePayment(
+                            courseId: course.id,
+                            amount: course.amount,
+                            currency: "USD",
+                          );
+                        }
+                      },
+                      child:
+                          state is PaymentLoading
+                              ? const CircularProgressIndicator()
+                              : Text("Access Course"),
+                    );
+                  },
                 ),
-                onTap: () {
-                  PaymentManager.makePayment(courses[index].amount, "USD");
-                  //context.push(CourseScreen(courseModel: courses[index]));
-                },
               );
             },
           ),
