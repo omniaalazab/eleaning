@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:eleaning/data/services/dio_helper.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 
@@ -12,7 +14,7 @@ class PaymentManager {
       await Stripe.instance.presentPaymentSheet();
       return true; // Payment successful
     } catch (e) {
-      print("Error while making payment: $e");
+      log("Error while making payment: $e");
 
       throw Exception(e.toString());
     }
