@@ -11,7 +11,7 @@ class PaymentRepository {
     try {
       return await PaymentManager.makePayment(amount, currency);
     } catch (e) {
-      log("Payment processing failed: $e");
+      log("Stripe Payment processing failed: $e");
       return false;
     }
   }
