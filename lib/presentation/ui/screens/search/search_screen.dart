@@ -117,10 +117,9 @@ class _SearchScreenState extends State<SearchScreen> {
                           );
                         } else if (state is SearchCoursesSucesss &&
                             searchController.text.isNotEmpty) {
-                          final courses = state.courses;
-                          return courses.isEmpty
+                          return state.courses.isEmpty
                               ? Center(child: Text(ConstantText.noCourse))
-                              : _buildSearchResults(courses);
+                              : _buildSearchResults(state.courses);
                         } else if (state is SearchCoursesFailure &&
                             searchController.text.isNotEmpty) {
                           return Center(child: Text(state.error));
@@ -180,7 +179,11 @@ class _SearchScreenState extends State<SearchScreen> {
                       child:
                           state is PaymentLoading
                               ? const CircularProgressIndicator()
-                              : Text("Access Course"),
+                              : ListTile(
+                                leading: Image.network(course.imagePath),
+                                title: Text(course.title),
+                                subtitle: Text(course.description),
+                              ),
                     );
                   },
                 ),
