@@ -5,8 +5,9 @@ import 'package:eleaning/core/helper/color_helper.dart';
 import 'package:eleaning/core/helper/text_style_helper.dart';
 import 'package:eleaning/data/models/course_model.dart';
 import 'package:eleaning/data/repository/courses_repository.dart';
+import 'package:eleaning/data/repository/payment_repository.dart';
 import 'package:eleaning/data/repository/popular_category_repository.dart';
-import 'package:eleaning/data/services/stripe_payment/payment_manager.dart';
+
 import 'package:eleaning/extensions/navigation_extension.dart';
 import 'package:eleaning/presentation/cubit/payment/payment_cubit.dart';
 import 'package:eleaning/presentation/cubit/payment/payment_state.dart';
@@ -34,6 +35,7 @@ class _SearchScreenState extends State<SearchScreen> {
   final PopularCategoryRepository popularCategoryRepository =
       PopularCategoryRepository();
   final CoursesRepository coursesRepository = CoursesRepository();
+  final PaymentRepository paymentRepository = PaymentRepository();
   late SearchCubit searchCubit;
   @override
   void initState() {
@@ -152,7 +154,7 @@ class _SearchScreenState extends State<SearchScreen> {
             itemBuilder: (context, index) {
               final course = courses[index];
               return BlocProvider(
-                create: (_) => PaymentCubit(),
+                create: (_) => PaymentCubit(paymentRepository),
                 child: BlocConsumer<PaymentCubit, PaymentState>(
                   listener: (context, state) {
                     if (state is PaymentSucess) {

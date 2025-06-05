@@ -1,10 +1,11 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:eleaning/data/services/stripe_payment/payment_manager.dart';
+import 'package:eleaning/data/repository/payment_repository.dart';
+
 import 'package:eleaning/presentation/cubit/payment/payment_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PaymentCubit extends Cubit<PaymentState> {
-  PaymentCubit() : super(PaymentInitial());
+  final PaymentRepository paymentRepository;
+  PaymentCubit(this.paymentRepository) : super(PaymentInitial());
 
   Future<void> makePayment({
     required String courseId,
@@ -13,13 +14,13 @@ class PaymentCubit extends Cubit<PaymentState> {
   }) async {
     emit(PaymentLoading());
     try {
-      final paymentSuccess = await PaymentManager.makePayment(amount, currency);
+      final paymentSuccess = await paymentRepository.processPayment(
+        amount: amount,
+        currency: currency,
+      );
 
       if (paymentSuccess) {
-        await FirebaseFirestore.instance
-            .collection('courses')
-            .doc(courseId)
-            .update({'isPaid': true});
+        await paymentRepository.markCourseAsPaid(courseId);
 
         emit(PaymentSucess());
       } else {
