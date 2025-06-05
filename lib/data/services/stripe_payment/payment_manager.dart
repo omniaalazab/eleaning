@@ -2,7 +2,7 @@ import 'package:eleaning/data/services/dio_helper.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 
 class PaymentManager {
-  static Future<void> makePayment(int amount, String currency) async {
+  static Future<bool> makePayment(int amount, String currency) async {
     try {
       String clientSecret = await _getClientSecret(
         (amount * 100).toString(),
@@ -10,8 +10,10 @@ class PaymentManager {
       );
       await _initializePaymentSheet(clientSecret);
       await Stripe.instance.presentPaymentSheet();
+      return true; // Payment successful
     } catch (e) {
       print("Error while making payment: $e");
+
       throw Exception(e.toString());
     }
   }
