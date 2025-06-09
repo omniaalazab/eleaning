@@ -1,6 +1,6 @@
 # 📚 E-Learning App
 
-An interactive and modern e-learning mobile application built using **Flutter**. This app provides users with an intuitive platform to explore courses, watch videos, track their progress, and improve their skills. The project is designed to showcase clean UI/UX, real-time features, and backend integration using **Firebase**, **Appwrite**
+An interactive and modern e-learning mobile application built using **Flutter**. This app provides users with an intuitive platform to explore courses, watch videos and improve their skills. The project is designed to showcase clean UI/UX, real-time features, and backend integration using **Firebase**, **Appwrite**
 ---
 
 ## 🚀 Features
