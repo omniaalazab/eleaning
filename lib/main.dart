@@ -9,6 +9,7 @@ import 'package:eleaning/presentation/ui/screens/onboarding/onboarding.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:screen_protector/screen_protector.dart';
 import 'package:sizer/sizer.dart';
@@ -23,6 +24,7 @@ void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await _preventRecording();
   _preventScreenshot();
+  await dotenv.load();
   Stripe.publishableKey = ApiKeys.stripePublishableKey;
   runApp(const MyApp());
 }
