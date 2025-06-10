@@ -1,7 +1,7 @@
-abstract class ApiKeys{
-static const String stripePublishableKey =
-      "pk_test_51RVEgTQTuEnVAVOq1MppPgUyKQxdGWixjboLaPJTTxGgO5gj0Z67Vf6Mu7I2mZ3Ydj50juLPWPKCguJkHOIcaeWx00iWKBP1We";
-  static const String stripeSecretKey =
-      "sk_test_51RVEgTQTuEnVAVOqmAaMXgWFaLjRReRzCPwep30mvFEcfOyARLj7mZKXhToyIDeZj03K2DAXYUOHM4qcsqYB2UbE00nnJ2YLWa";
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
+abstract class ApiKeys {
+  static String get stripePublishableKey =>
+      dotenv.env["STRIPE_PUBLISHABLE_KEY"] ?? "";
+  static String get stripeSecretKey => dotenv.env['STRIPE_SECRET_KEY'] ?? '';
 }

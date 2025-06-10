@@ -8,7 +8,7 @@ import 'package:eleaning/data/repository/courses_repository.dart';
 import 'package:eleaning/data/repository/payment_repository.dart';
 import 'package:eleaning/data/repository/popular_category_repository.dart';
 
-import 'package:eleaning/extensions/navigation_extension.dart';
+import 'package:eleaning/core/extensions/navigation_extension.dart';
 import 'package:eleaning/presentation/cubit/payment/payment_cubit.dart';
 import 'package:eleaning/presentation/cubit/payment/payment_state.dart';
 import 'package:eleaning/presentation/cubit/popular_category/popular_category_cubit.dart';

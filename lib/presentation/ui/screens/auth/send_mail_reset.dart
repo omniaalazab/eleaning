@@ -1,8 +1,8 @@
 import 'package:eleaning/core/constant_text.dart';
 import 'package:eleaning/core/helper/color_helper.dart';
 import 'package:eleaning/core/helper/text_style_helper.dart';
-import 'package:eleaning/extensions/media_query_extension.dart';
-import 'package:eleaning/extensions/navigation_extension.dart';
+import 'package:eleaning/core/extensions/media_query_extension.dart';
+import 'package:eleaning/core/extensions/navigation_extension.dart';
 import 'package:eleaning/presentation/ui/screens/auth/login.dart';
 import 'package:eleaning/presentation/ui/widgets/common_widget/custom_elevated_button.dart';
 import 'package:flutter/material.dart';
