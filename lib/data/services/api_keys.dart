@@ -4,4 +4,5 @@ abstract class ApiKeys {
   static String get stripePublishableKey =>
       dotenv.env["STRIPE_PUBLISHABLE_KEY"] ?? "";
   static String get stripeSecretKey => dotenv.env['STRIPE_SECRET_KEY'] ?? '';
+  static String get firebaseAPIKey => dotenv.env['FIREBASE_API_KEY'] ?? '';
 }
