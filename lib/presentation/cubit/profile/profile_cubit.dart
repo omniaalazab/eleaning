@@ -7,7 +7,8 @@ import 'dart:typed_data';
 import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart' as models;
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:eleaning/extensions/navigation_extension.dart';
+import 'package:eleaning/core/extensions/navigation_extension.dart';
+
 import 'package:eleaning/main.dart';
 import 'package:eleaning/presentation/cubit/profile/profile_state.dart';
 import 'package:eleaning/presentation/ui/widgets/common_widget/toast_dialog.dart';

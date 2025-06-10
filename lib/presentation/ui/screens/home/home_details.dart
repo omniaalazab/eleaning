@@ -4,7 +4,7 @@ import 'package:eleaning/core/helper/text_style_helper.dart';
 import 'package:eleaning/data/repository/most_watched_repository.dart';
 import 'package:eleaning/data/repository/popular_category_repository.dart';
 import 'package:eleaning/data/repository/teacher_repository.dart';
-import 'package:eleaning/extensions/media_query_extension.dart';
+import 'package:eleaning/core/extensions/media_query_extension.dart';
 import 'package:eleaning/presentation/cubit/most_watched/most_watched_cubit.dart';
 import 'package:eleaning/presentation/cubit/most_watched/most_watched_state.dart';
 import 'package:eleaning/presentation/cubit/popular_category/popular_category_cubit.dart';

@@ -1,7 +1,7 @@
 import 'package:eleaning/core/constant_text.dart';
 import 'package:eleaning/core/helper/color_helper.dart';
 import 'package:eleaning/core/helper/text_style_helper.dart';
-import 'package:eleaning/extensions/navigation_extension.dart';
+import 'package:eleaning/core/extensions/navigation_extension.dart';
 import 'package:eleaning/presentation/cubit/profile/profile_cubit.dart';
 import 'package:eleaning/presentation/cubit/profile/profile_state.dart';
 import 'package:eleaning/presentation/cubit/signout/signout_cubit.dart';
